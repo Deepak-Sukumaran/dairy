@@ -128,7 +128,7 @@ class _DairyHomeState extends State<DairyHome> {
                                           right: 5,
                                           child: IconButton(
                                               onPressed: () {
-                                                deleteDairy(dayBydayDairy[index]['dcontent']['id']);
+                                                deleteDairy(dayBydayDairy[index]['id']);
                                               },
                                               icon: Icon(
                                                 Icons.delete,
@@ -269,6 +269,8 @@ class _DairyHomeState extends State<DairyHome> {
     await SQLdb.update_dairy(id, titleController.text, contentController.text);
     loadUi();
   }
+
+
 Future <void> deleteDairy(int id) async{
   await SQLdb.delete_dairy(id);
   loadUi();

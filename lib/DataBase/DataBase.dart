@@ -32,13 +32,11 @@ class SQLdb {
     final db = await SQLdb.createDatabase();
     final newdata = {'dtitle':title, 'dcontent' : content, 'createdAt' : DateTime.now().toString()};
     final upid = await db.update('dairy', newdata, where:  'id = ?', whereArgs: [id]);
-   
+   return upid;
   }
 
-  static Future < void> delete_dairy(int id) async{
+  static Future <void> delete_dairy(int id) async{
     final db = await SQLdb.createDatabase();
-    await db.execute('DELETE FROM dairy WHERE id =?', [id]);
-  }
-
- 
-}
+await db.delete('dairy', where:  'id = ?', whereArgs: [id]);
+ try{await db.delete('dairy', where:  'id = ?', whereArgs: [id]);}catch(e){throw Exception();}
+}}
