@@ -35,5 +35,10 @@ class SQLdb {
    
   }
 
+  static Future < void> delete_dairy(int id) async{
+    final db = await SQLdb.createDatabase();
+    await db.execute('DELETE FROM dairy WHERE id =?', [id]);
+  }
+
  
 }

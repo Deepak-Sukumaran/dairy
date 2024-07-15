@@ -128,7 +128,7 @@ class _DairyHomeState extends State<DairyHome> {
                                           right: 5,
                                           child: IconButton(
                                               onPressed: () {
-                                                deleteDairy(null);
+                                                deleteDairy(dayBydayDairy[index]['dcontent']['id']);
                                               },
                                               icon: Icon(
                                                 Icons.delete,
@@ -269,6 +269,15 @@ class _DairyHomeState extends State<DairyHome> {
     await SQLdb.update_dairy(id, titleController.text, contentController.text);
     loadUi();
   }
+Future <void> deleteDairy(int id) async{
+  await SQLdb.delete_dairy(id);
+  loadUi();
+   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text("Deleted Succesfully"),
+      duration: Durations.medium1,
+    ));
+}
+
 
   void loadUi() async {
     final data = await SQLdb.load_dairy();
@@ -277,5 +286,5 @@ class _DairyHomeState extends State<DairyHome> {
     });
   }
 
-  void deleteDairy(param0) {}
+  
 }
