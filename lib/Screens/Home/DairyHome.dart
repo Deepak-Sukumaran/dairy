@@ -3,6 +3,7 @@
 import 'package:dairy/DataBase/DB%20List.dart';
 import 'package:dairy/DataBase/DataBase.dart';
 import 'package:dairy/Widgets/Calender.dart';
+import 'package:dairy/myfunction.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:readmore/readmore.dart';
@@ -15,11 +16,14 @@ class DairyHome extends StatefulWidget {
 }
 
 class _DairyHomeState extends State<DairyHome> {
+  late Myfunction obj;
   @override
   void initState() {
-    loadUi();
+   loadUi();
     super.initState();
+    obj = Myfunction(loadUi);
   }
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -128,7 +132,7 @@ class _DairyHomeState extends State<DairyHome> {
                                           right: 5,
                                           child: IconButton(
                                               onPressed: () {
-                                                deleteDairy(dayBydayDairy[index]['id']);
+                                               obj.deleteDairy(dayBydayDairy[index]['id'], context);
                                               },
                                               icon: Icon(
                                                 Icons.delete,
@@ -239,10 +243,10 @@ class _DairyHomeState extends State<DairyHome> {
                   ElevatedButton(
                       onPressed: () async {
                         if (id == null) {
-                          await createDairy();
+                          await obj.createDairy(titleController.text, contentController.text);
                         }
                         if (id != null) {
-                          await updateDairy(id);
+                          await obj.updateDairy(id, titleController.text, contentController.text );
                         }
                         titleController.text = '';
                         contentController.text = '';
@@ -258,35 +262,11 @@ class _DairyHomeState extends State<DairyHome> {
     );
   }
 
-  Future<void> createDairy() async {
-    var id =
-        await SQLdb.create_dairy(titleController.text, contentController.text);
-    print(id);
-    loadUi();
-  }
-
-  Future<void> updateDairy(int id) async {
-    await SQLdb.update_dairy(id, titleController.text, contentController.text);
-    loadUi();
-  }
-
-
-Future <void> deleteDairy(int id) async{
-  await SQLdb.delete_dairy(id);
-  loadUi();
-   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text("Deleted Succesfully"),
-      duration: Durations.medium1,
-    ));
-}
-
-
-  void loadUi() async {
+  void loadUi ()async{
     final data = await SQLdb.load_dairy();
     setState(() {
       dayBydayDairy = data;
     });
   }
-
-  
 }
+
